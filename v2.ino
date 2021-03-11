@@ -17,8 +17,8 @@
 #define m5_add 0x05
 #define m6_add 0x06
 
-uint8_t adds[6] = {m1_add,m2_add,m3_add,m4_add,m5_add,m6_add};
-uint8_t leds[6] = {m1_led,m2_led,m3_led,m4_led,m5_led,m6_led};
+uint8_t adds[NUM_MOTORS] = {m1_add,m2_add,m3_add,m4_add,m5_add,m6_add};
+uint8_t leds[NUM_MOTORS] = {m1_led,m2_led,m3_led,m4_led,m5_led,m6_led};
 
 uint8_t pJ[5];
 
@@ -37,7 +37,7 @@ void record();
 void tx(uint8_t id, uint8_t len, uint8_t cmd);
 void tx(uint8_t id, uint8_t len, uint8_t cmd, uint8_t *prms);
 uint8_t * rx();
-void gotopoint(uint8_t );
+void gotopoint(uint8_t *p);
 
 void setup() {
 
@@ -169,7 +169,24 @@ uint8_t * rx() {
 
 	static uint8_t r[MAX_LEN];
 
-	// 
-
 	return * r;
+}
+
+void gotopointL(uint8_t *p) {
+	
+	uint8_t l1 = 125;
+	uint8_t l2 = 125;
+	uint8_t l3 = 60.7;
+	uint8_t h1 = 72.2;
+
+}
+
+void gotopointJ(uint8_t *p) {
+	
+	for (uint8_t i=0; i<NUM_MOTORS; i++) {
+		//SET POSITION
+		tx(adds[i],0x04,0x04,{0x2A,p[i]});
+	}
+	//ACTION
+	tx(0xFE,0x02,0x05);
 }
